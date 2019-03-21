@@ -1,0 +1,55 @@
+---
+- name: Download Magento
+  git:
+    repo: https://github.com/magento/magento2
+    dest: "{{project_path}}"
+- name: composer install
+  composer:
+    command: install
+    working_dir: "{{ project_path }}"
+- name: change directory ...
+  file:
+    path: "{{ project_path }}"
+    mode: 0755
+    recurse: yes
+- name: execute commande bin/magento
+  command: "/usr/bin/php  {{ project_path }}/bin/magento setup:install \
+    --base-url=http://magento.dev.agence-izar.com/
+    --db-host=192.168.30.252 \
+    --db-name=magento \
+    --db-user=magento \
+    --db-password=magento \
+    --admin-firstname=Admin \
+    --admin-lastname=User \
+    --admin-email=admin@example.com \
+    --admin-user=admin \
+    --admin-password=admin123 \
+    --language=en_US \
+    --currency=USD \
+    --timezone=America/Chicago \
+    --use-rewrites=1 "
+
+
+# - name: Create a new database with name 'magento'
+#   mysql_db:
+#     name: magento
+#     login_host: 192.168.30.252
+#     login_user: magento
+#     login_password: magento
+#     state: present
+#
+# - name: CREATE DBS
+#   mysql_db:
+#     name: magento
+#     login_host: 192.168.30.252
+#     login_password: magento
+#     login_user: magento
+#     state: present
+# - name: Change ownership of magento
+#   become: yes
+#   file:
+#     path: "{{ project_path }}"
+#     owner: www-data
+#     group: www-data
+#     state: directory
+#     recurse: yes
